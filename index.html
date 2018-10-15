@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="btn">发送请求</button>
+    <h1></h1>
+</body>
+<script>
+    // var btn = document.querySelector("#btn")
+    // btn.addEventListener("click", function () {
+    //     let request = new XMLHttpRequest();
+    //     request.open("post", "server.js")
+    //     request.setRequestHeader("content-Type", "application/x-wwww-form-urlencoded")
+    //     request.send('')
+    // })
+    window.jquery={}
+    
+    window.jquery.ajax = function (option) {   //这时候option是一个对象
+        let url = option.url
+        let method = option.method  //命名空间
+        let header=option.header
+        let body=option.body
+        let successFn = option.successFn
+        let failFn = option.failFn
+        let request = new XMLHttpRequest();
+        request.open(method, url)
+        for(key in header){
+            let value=header[key]
+            request.setRequestHeader(key,value)
+        }
+        request.onreadystatechange = function () {
+            if (request.readyState === 4){
+                if(request.status === 200) {
+                successFn.call(undefined, request.responseText)
+            } else {
+                failFn.call(undefined, request)
+            }
+            } 
+        }
+        request.send(body)
+    }
+    var btn=document.querySelector("#btn")
+    btn.addEventListener("click", function () {
+        window.jquery.ajax({
+            url: "/xxx",
+            method: "get",
+            header:{"content-Type":"application/x-wwww-form-urlencoded;utf-8"},
+            successFn: function(x){
+                console.log(x)
+            },
+            failFn: function(x){
+                console.log(x)
+            }
+        
+        })  //把对象传进函数
+    })
+</script>
+
+</html>
